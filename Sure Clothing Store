@@ -1,0 +1,30 @@
+CREATE TABLE "Sure" (id INTEGER PRIMARY KEY, clothing TEXT, units_sold INTEGER, price INTEGER, variety_color INTEGER);
+
+INSERT INTO "sure" VALUES 
+(1, "shorts", 5, 25, 4),
+(2, "pants", 12, 50, 8),
+(3, "skirts", 9, 25, 5),
+(4, "tops", 17, 20, 15),
+(5, "blouses", 14, 30, 10),
+(6, "cardigans",6, 60, 3),
+(7, "polos", 13, 45, 9),
+(8, "button_up", 15, 65, 8),
+(9, "sneakers", 10, 75, 4),
+(10, "sandals", 20, 35, 6),
+(11, "mules", 8, 50, 3),
+(12, "jackets", 7, 70, 4),
+(13, "hoodies", 30, 30, 12),
+(14, "sunglasses", 11, 25, 7),
+(15, "hats", 16, 30, 12);
+
+-- List os clothing units order by price
+SELECT clothing, price FROM "Sure" ORDER BY "price" DESC;
+
+-- List of Clothing Units sold over 35 dollars order by quantity of units sold
+SELECT clothing, units_sold, price FROM "Sure" WHERE price >= 35 ORDER BY units_sold DESC;
+
+--Total Sales
+SELECT SUM(price) FROM "Sure";
+
+-- Average price from Total Sales
+SELECT AVG(price) FROM "Sure";
