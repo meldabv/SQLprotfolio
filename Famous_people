@@ -1,0 +1,106 @@
+/* Created three tables about famous singers worldwide with personal and musical information */
+
+-- This table shows the name of the singer, their country of birth and their age (zero means they passed away) --
+CREATE TABLE "Singers"
+    (id INTEGER PRIMARY KEY,
+    "fullname" TEXT,
+    "origin" TEXT,
+    "age" INTEGER);
+
+INSERT INTO "Singers" (fullname, origin, age)
+    VALUES ("Bill Withers", "West Virginia USA", 0);
+INSERT INTO "Singers" (fullname, origin, age)
+    VALUES ("Stevie Ray Vaughan","Texas USA", 0);
+INSERT INTO "Singers" (fullname, origin, age)
+    VALUES ("Luis Miguel","Puerto Rico", 53);
+INSERT INTO "Singers" (fullname, origin, age)
+    VALUES ("Snoop Dog","California USA",51);
+INSERT INTO "Singers" (fullname, origin, age)
+    VALUES ("Eminem","Missouri", 50);
+INSERT INTO "Singers" (fullname, origin, age)
+    VALUES ("Carin León","Hermosillo Mexico", 33);
+
+-- This table relates to the famous singers shown in the table above with their hits, the year it was released and album --
+CREATE TABLE "Hits"
+    (id INTEGER PRIMARY KEY,
+    "Singer_id" INTEGER,
+    "Hit" TEXT,
+    "Year" INTEGER,
+    "Album" TEXT);
+
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES (1,"Lovely Day", 1977, "Menagerie");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 1, "Just the Two of Us", 1980, "Winelight");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 1, "Lean on Me", 1972, "Still Bill");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 1, "Grandmas Hands", 1971, "Just as I Am");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 2, "Pride and Joy", 1983, "Texas Flood");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 2, "Love Struck Baby", 1983, "Texas Flood");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 3, "Hasta que me Olvides", 1993, "Aries");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 3, "Culpable o No", 1988, "Busca una Mujer");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 3, "Por Debajo de la Mesa", 1997, "Romances");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 4, "Drop it Like is Hot", 2004, "The masterpiece");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 4, "Lay Low", 2000, "The Last Meal");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 5, "The Real Slim Shady", 2000, "The Marshall Mathers LP");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 5, "Lose Yourdelf", 2002, "8 Mile");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 5, "Rap God", 2013, "The Marshall Mathers LP 2");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 6, "Primera Cita", 2023, "Colmillo de Leche");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 6, "El Amor de tu Vida", 2020, "El Amor de tu Vida");
+INSERT INTO "Hits" ("Singer_id", "Hit", "Year", "Album")
+    VALUES ( 6, "No Es Por Acá", 2023, "Colmillo de Leche");
+
+-- This table relates to the famous musicians from table one, showing their songs genre  --
+CREATE TABLE "Genres"
+    (id INTEGER PRIMARY KEY,
+    Singer_id TEXT,
+    Genre TEXT);
+
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (1, "Soul");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (1, "R and B");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (2, "Blues Rock");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (3, "Baladas");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (3, "Pop");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (3, "Ranchero");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (4, "Hip Hop");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (4, "Rap");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (5, "Hip Hop");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (5, "Rap");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (6, "Regional Mexicano");
+INSERT INTO "Genres" ("Singer_id", "Genre")
+    VALUES (6, "Pop");
+
+
+-- This query combines the three tables above. It shows all songs from table two, and their respective singer and  genre --
+SELECT s.fullname AS "Singer_name", h.hit, g.Genre
+    FROM "Singers" AS "s"
+        JOIN "Hits" AS "h"
+            ON s.id = h.singer_id
+        JOIN "Genres" AS "g"
+            ON h.singer_id = g.singer_id
+        GROUP BY h.hit
+        ORDER BY singer_name ASC;
