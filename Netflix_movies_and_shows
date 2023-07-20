@@ -1,0 +1,32 @@
+-- List of all the components in the table "netflix_people" --
+    SELECT count(*) FROM "netflix_people"
+
+-- List of how many movie titles are there in the database --
+    SELECT COUNT(title) FROM "netflix_titles_info" WHERE type='Movie'
+
+-- Show the most recent batch of tv shows and/or movies added to the database --
+    SELECT MAX(date_added) FROM "netflix_titles_info" 
+
+-- List all the movies and tv shows in alphabetical order --
+    SELECT title, type FROM "netflix_titles_info" ORDER BY title ASC
+
+-- Show the Director for the movie The Starling --
+    SELECT p.director
+    FROM "netflix_titles_info"  t
+    LEFT JOIN "netflix_people" p
+    ON t.show_id=p.show_id
+    WHERE t.title='The Starling'
+
+-- List the oldest movie in the database and what year was it made -- 
+-- First way --
+    SELECT title, release_year
+    FROM "netflix_titles_info"  
+    WHERE type='Movie'
+    ORDER BY release_year ASC LIMIT 1
+
+-- Second way --
+    SELECT title, release_year
+    FROM "netflix_titles_info" 
+    WHERE type='Movie'
+    AND release_year <= 
+    (SELECT MIN(release_year) FROM "netflix_titles_info" WHERE type='Movie')
