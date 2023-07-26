@@ -1,4 +1,4 @@
-
+The objective of this query is to filter information about products sold, by month, product, quantity, etc.
 
 **  How many orders were placed in January? **
 SELECT COUNT(orderID) 
@@ -7,19 +7,46 @@ WHERE length(orderid) = 6
 AND orderid<>'Order ID'
 
 ** How many of those orders were for an iPhone? **
-
+SELECT COUNT(orderID) 
+FROM BIT_DB.JanSales
+WHERE length(orderid) = 6 
+AND orderid<>'Order ID'
+AND product='iPhone'
 
 ** Select the customer account numbers for all the orders that were placed in February. **
-
+SELECT C.acctnum
+FROM BIT_DB.customers C
+INNER JOIN BIT_DB.FebSales F
+    ON C.order_id=F.orderID
+WHERE length(orderid) = 6 
+AND orderid<>'Order ID'
 
 ** Which product was the cheapest one sold in January, and what was the price? **
-
+SELECT product, min(price) 
+FROM BIT_DB.JanSales Jan 
+GROUP BY product, price 
+ORDER BY price ASC
+LIMIT 1
 
 ** What is the total revenue for each product sold in January? **
-
+SELECT product, SUM(quantity)*price AS 'Revenue'
+FROM BIT_DB.JanSales Jan 
+GROUP BY product
 
 ** Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue? **
-
+SELECT SUM(quantity), product, SUM(quantity)*price AS 'Revenue'
+FROM BIT_DB.customers C
+INNER JOIN BIT_DB.FebSales F
+    ON C.order_id=F.orderID
+WHERE length(orderid) = 6 
+AND orderid<>'Order ID'
+    AND F.location='548 Lincoln St, Seattle, WA 98101'
 
 ** How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? **
-
+SELECT COUNT(quantity), AVG(quantity*price)
+FROM BIT_DB.customers C
+LEFT JOIN BIT_DB.FebSales F
+    ON C.order_id=F.orderID
+WHERE length(orderid) = 6 
+AND orderid<>'Order ID'
+AND F.quantity>2
