@@ -1,6 +1,6 @@
 ** For this project I gathered Spotify data from Kaggle's website to create a table and analyze it in the following described ways; **
 
-** Table Spotify_data **
+** Table created for Spotify_data **
 CREATE TABLE BIT_DB.Spotifydata (
 id integer PRIMARY KEY,
 artist_name varchar NOT NULL,
