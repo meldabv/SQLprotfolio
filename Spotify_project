@@ -17,7 +17,7 @@ FROM BIT_DB.Spotifydata
 GROUP BY artist_name
 ORDER BY popularity DESC LIMIT 10
 
-** Find the artist with the longest duration song **
+** Find the artist with the longest song **
 SELECT artist_name, duration_ms
 FROM BIT_DB.Spotifydata
 GROUP BY artist_name
