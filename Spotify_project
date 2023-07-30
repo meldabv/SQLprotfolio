@@ -1,0 +1,32 @@
+** For this project I gathered Spotify data from Kaggle's website to create a table and analyze it in the following described ways; **
+
+** Find the Average danceability by artist and tracks **
+SELECT artist_name, SUM(danceability)/COUNT(track_name) Avg_Dance
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+
+** Find the Average danceability of Ariana Grande's tracks **
+SELECT artist_name, track_name, SUM(danceability)/COUNT(track_name) Avg_Dance
+FROM BIT_DB.Spotifydata
+WHERE artist_name='Ariana Grande'
+ORDER BY artist_name
+
+** Find the top ten most popular artist **
+SELECT artist_name, popularity
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY popularity DESC LIMIT 10
+
+** Find the artist with the longest duration song **
+SELECT artist_name, duration_ms
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY duration_ms DESC LIMIT 1
+
+** Find the average danceability of the 10 most popular songs **
+SELECT AVG(danceability)
+FROM (SELECT track_name, popularity, danceability
+FROM BIT_DB.Spotifydata
+GROUP BY track_name
+ORDER BY Popularity DESC LIMIT 10)
+
