@@ -51,3 +51,16 @@ FROM BIT_DB.Spotifydata
 GROUP BY track_name
 ORDER BY Popularity DESC LIMIT 10)
 
+** 
+WITH Popular_Avg AS (
+SELECT artist_name, AVG(popularity) Avg_Popularity
+FROM Spotifydata
+GROUP BY artist_name
+
+)
+
+SELECT artist_name, Avg_Popularity, 'Top Stars' AS tag
+FROM Popular_Avg
+WHERE Avg_popularity >=90
+ORDER BY Avg_popularity DESC;
+
