@@ -1,0 +1,107 @@
+
+
+
+** How many customers the store has up-to-date **
+SELECT COUNT(CustomerId)
+FROM chinook.customers
+
+** Show the customer's Full Name ordered by Country of origin **
+SELECT CustomerId, FirstName || ' ' || LastName AS Full_Name, Country
+FROM chinook.customers
+ORDER BY country
+
+** Show the customer's Full Name that are outside of the US **
+SELECT CustomerId, FirstName || ' ' || LastName AS Full_Name, Country
+FROM chinook.customers
+WHERE country <> 'USA'
+ORDER BY country
+
+** Show only customers from Brazil **
+SELECT CustomerId, FirstName || ' ' || LastName AS Full_Name, Country
+FROM chinook.customers
+WHERE country = 'Brazil'
+
+** Show invoices from Brazil customers, including Invoice ID and Date, Customer Full Name, and Invoice Country of origin **
+SELECT FirstName || ' ' || LastName AS Full_Name, Inv.InvoiceId, Inv.InvoiceDate, Inv.BillingCountry
+FROM chinook.customers Cus
+JOIN chinook.invoices Inv
+    ON Cus.CustomerID = Inv.CustomerId
+WHERE country = 'Brazil'
+GROUP BY Cus.CustomerID
+
+** Show the Full Names of the employees that are in the Sales Department **
+SELECT  FirstName || ' ' || LastName AS Full_Name, Title
+FROM chinook.employees
+WHERE Title LIKE 'Sales%'
+
+** List the Countries that generated an Invoice for the Store (Ordered alphabetically by country) **
+SELECT distinct BillingCountry
+FROM chinook.invoices
+ORDER BY BillingCountry
+
+** List how many invoices each country generated (Ordered alphabetically by country) **
+SELECT COUNT(InvoiceID) AS Number_of_Invoices, BillingCountry
+FROM chinook.invoices
+GROUP BY BillingCountry
+ORDER BY BillingCountry
+
+** List the Invoices and their respective representative ID, Name, and Last Name **
+SELECT Inv.InvoiceId, Cus.SupportRepId AS Rep_Number, Emp.FirstName || ' ' || Emp.LastName AS Rep_Full_Name, Emp.Title
+FROM chinook.employees Emp
+INNER JOIN chinook.customers Cus
+    ON Emp.EmployeeID = Cus.SupportRepId
+INNER JOIN chinook.invoices Inv
+    ON Cus.CustomerId = Inv.CustomerId
+ORDER BY Inv.InvoiceId
+
+** List every Invoice with their respective Total, Customer's Full Name, Country of Origin, and Representative's Full Name **
+SELECT 
+    Inv.InvoiceId, 
+    Inv.Total, 
+    Cus.FirstName || ' ' || Cus.LastName AS Customer_Full_Name,
+    Inv.BillingCountry AS Country,
+    Emp.FirstName || ' ' || Emp.LastName AS Rep_Full_Name
+FROM chinook.employees Emp
+INNER JOIN chinook.customers Cus
+    ON Emp.EmployeeID = Cus.SupportRepId
+INNER JOIN chinook.invoices Inv
+    ON Cus.CustomerId = Inv.CustomerId
+ORDER BY Country
+
+
+** Show how many Invoices were there in 2009 **
+SELECT COUNT(InvoiceDate)
+FROM chinook.invoices
+WHERE InvoiceDate Like '2009%'
+
+** Show the total sales for the year 2009 **
+SELECT SUM(Total) AS Total_Sales_2009
+FROM chinook.invoices
+WHERE InvoiceDate Like '2009%'
+
+** Show the total sales up-to-date and the total sales for each year (2009 to 2013) **
+SELECT SUM(Total) AS Total_Sales,
+    (SELECT SUM(Total)
+    FROM chinook.invoices
+    WHERE InvoiceDate Like '2009%') AS Total_Sales_2009,
+    (SELECT SUM(Total)
+    FROM chinook.invoices
+    WHERE InvoiceDate Like '2010%') AS Sales_2010,
+    (SELECT SUM(Total)
+    FROM chinook.invoices
+    WHERE InvoiceDate Like '2011%') AS Sales_2011,
+    (SELECT SUM(Total)
+    FROM chinook.invoices
+    WHERE InvoiceDate Like '2012%') AS Sales_2012,
+    (SELECT SUM(Total)
+    FROM chinook.invoices
+    WHERE InvoiceDate Like '2013%') AS Sales_2013
+FROM chinook.invoices
+LIMIT 1
+
+** List the Track Name and their respective Invoice Id Number **
+SELECT Name AS Track_Name, InvoiceLineId
+FROM invoice_items II
+INNER JOIN tracks T
+    ON II.TrackID = T.TrackId
+
