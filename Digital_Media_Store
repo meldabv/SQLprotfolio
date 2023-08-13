@@ -1,4 +1,5 @@
-
+** This project aims to join 2 and more tables from the database Chinook to find useful information.
+** You will find the detailed description of each query on the top followed by the query.
 
 
 ** How many customers the store has up-to-date **
@@ -70,30 +71,30 @@ ORDER BY Country
 
 
 ** Show how many Invoices were there in 2009 **
-SELECT COUNT(InvoiceDate)
+SELECT COUNT(InvoiceDate) AS 'Number of Invoices'
 FROM chinook.invoices
 WHERE InvoiceDate Like '2009%'
 
 ** Show the total sales for the year 2009 **
-SELECT SUM(Total) AS Total_Sales_2009
+SELECT ROUND(SUM(Total), 2) AS Total_Sales_2009
 FROM chinook.invoices
 WHERE InvoiceDate Like '2009%'
 
 ** Show the total sales up-to-date and the total sales for each year (2009 to 2013) **
-SELECT SUM(Total) AS Total_Sales,
-    (SELECT SUM(Total)
+SELECT ROUND(SUM(Total), 2) AS Total_Sales,
+    (SELECT ROUND(SUM(Total), 2)
     FROM chinook.invoices
-    WHERE InvoiceDate Like '2009%') AS Total_Sales_2009,
-    (SELECT SUM(Total)
+    WHERE InvoiceDate Like '2009%') AS Sales_2009,
+    (SELECT ROUND(SUM(Total), 2)
     FROM chinook.invoices
     WHERE InvoiceDate Like '2010%') AS Sales_2010,
-    (SELECT SUM(Total)
+    (SELECT ROUND(SUM(Total), 2)
     FROM chinook.invoices
     WHERE InvoiceDate Like '2011%') AS Sales_2011,
-    (SELECT SUM(Total)
+    (SELECT ROUND(SUM(Total), 2)
     FROM chinook.invoices
     WHERE InvoiceDate Like '2012%') AS Sales_2012,
-    (SELECT SUM(Total)
+    (SELECT ROUND(SUM(Total), 2)
     FROM chinook.invoices
     WHERE InvoiceDate Like '2013%') AS Sales_2013
 FROM chinook.invoices
@@ -104,4 +105,56 @@ SELECT Name AS Track_Name, InvoiceLineId
 FROM invoice_items II
 INNER JOIN tracks T
     ON II.TrackID = T.TrackId
+
+** List Invoice ID of each purchased Track with respective Track Name and Artist Name **
+SELECT II.InvoiceLineId AS Invoice_Id, T.Name AS Track_Name, Ar.Name AS Artist_Name
+FROM invoice_items II
+JOIN tracks T
+    ON II.TrackID = T.TrackId
+JOIN albums Al
+    ON T.AlbumId = Al.AlbumId
+JOIN Artists Ar
+    ON Al.ArtistId = Ar.ArtistId
+
+** List all tracks including their Album Title, Media Type, and Genre Type ** 
+SELECT Tracks.Name AS 'Track Name', Albums.Title AS 'Album Name', Media.Name AS 'Media Name', Genres.Name AS 'Genre Name'
+FROM Tracks
+JOIN Albums
+    ON Tracks.AlbumID = Albums.AlbumId
+JOIN Media_types AS Media
+    ON Tracks.MediaTypeId = Media.MediaTypeId
+JOIN Genres
+    ON Tracks.GenreID = Genres.GenreId
+ORDER BY Genres.Name
+
+** Show the total sales made by each agent, including Agent's Full Name and Id **
+SELECT ROUND(SUM(I.Total), 2) AS 'Total Sales', C.SupportRepId AS 'Rep. Id', E.FirstName || ' ' || E.LastName As 'Rep. Full Name'
+    FROM Employees E
+    JOIN customers C
+        ON E.EmployeeId = C.SupportRepId
+    JOIN Invoices I
+        ON C.CustomerId = I.CustomerId
+    GROUP BY C.SupportRepId
+
+** List the total sales made by each agent in 2009, including the Agent's Full Name **
+SELECT ROUND(SUM(I.Total), 2) AS 'Total Sales', C.SupportRepId AS 'Rep. Id', E.FirstName || ' ' || E.LastName As 'Rep. Full Name'
+    FROM Employees E
+    JOIN customers C
+        ON E.EmployeeId = C.SupportRepId
+    JOIN Invoices I
+        ON C.CustomerId = I.CustomerId
+    WHERE I.InvoiceDate LIKE '2009%'
+    GROUP BY C.SupportRepId
+
+** Show which sales agent made the most dollars in sales in 2009 **
+SELECT ROUND(SUM(I.Total), 2) AS 'Total Sales', E.FirstName || ' ' || E.LastName As 'Rep. Full Name'
+    FROM Employees E
+    JOIN customers C
+        ON E.EmployeeId = C.SupportRepId
+    JOIN Invoices I
+        ON C.CustomerId = I.CustomerId
+    WHERE I.InvoiceDate LIKE '2009%'
+    GROUP BY C.SupportRepId
+ORDER BY ROUND(SUM(I.Total), 2) DESC LIMIT 1
+
 
